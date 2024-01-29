@@ -1,0 +1,8 @@
+# Ignore all files, and allow-list the ones we want to track
+*
+/*
+
+!.gitignore
+!pom.xml
+
+!src/main/java/uk/ac/ic/doc/spe/covidsaw/App.java

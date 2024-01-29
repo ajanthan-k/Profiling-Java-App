@@ -1,0 +1,13 @@
+# Ignore all files, and allow-list the ones we want to track
+*
+/*
+
+!.gitignore
+!CMakeLists.txt
+
+!Benchmarks/CppBenchmarkBenchmarks.cpp
+
+!Source/CppBenchmark.cpp
+!Source/Cppbenchmark.hpp
+
+!Tests/CppBenchmarkTests.cpp
