@@ -1,1 +1,15 @@
-replace me by no more than 500 words
+The most expensive part of aggregation was the `splitOn` function - which divides a dataset into smaller selections based on one or more categorical columns. 
+
+The chosen hypothesis was that the execution time of `splitOn` increases with the skewness of the data distribution across categories, aiming to mimic real-world scenarios where data may not be uniformly distributed across categories. The premise was that handling a few large groups is computationally more demanding due to the increased cost of managing larger Selection objects, while also handling many small groups adds overhead in managing a larger number of keys.
+
+Let S represent skewness of the data in column. The execution time T is a function of both the number of rows N and the skewness S, such that \(T \propto N * g(S)\).
+
+We control other factors by keeping total number of rows and the cardinality of the split columns constant. The data generator creates a table with a "Category" column (to manipulate skewness) and "Value" column (for aggregation). The skewness is adjusted by varying the probability distribution of category assignments, controlled via a `skewness` parameter ranging from 0.1 to 0.9, with higher values indicating greater skewness.
+
+Results however showed the oppposite, and execution time decreased with increasing skewness. The use of BitmapBackedSelection and its underlying RoaringBitmap data structure, which uses run-length encoding, makes it more efficient when handling few very dense Selections and many sparse ones, as in highly skewed datasets - mitigating the expected impacts of skewness. The decrease was likely due to the overall reduced number of categories in the more skewed datasets, which in turn reduced the number of keys to manage.
+
+When reimplementing the benchmark in C++, the overall table and selection handling were simplifed, as my Java benchmark only consisted of two columns, and a simplified run-length encoded bitmap was also implemented. Due to having to use the higher level summarize().by() function in Java, the aggregation and mean calculation was also added.
+
+The results were consistent with the Java benchmark, and again the execution time decreased with increasing skewness, where the C++ implementation decreased 12% from 0.1 to 0.9, However not as significantly as in the Java benchmark which decreased by around 25% - this is likely due to the C++ version's simplifed bitmap being less optimised and efficient than the Java version's RoaringBitmap, when handling the more skewed datasets.
+
+Although direct comparison is difficult due to the random data generation, overall results show that the C++ implementation was around 95% faster than the Java version at same skewness level of 0.1, and still around 92% faster at 0.9 skewness.

@@ -70,4 +70,7 @@ add_dependencies(Benchmarks googlebenchmark)
 target_include_directories(Benchmarks SYSTEM PUBLIC ${CppBenchmark_BINARY_DIR}/deps/include)
 target_link_libraries(Benchmarks ${CppBenchmark_BINARY_DIR}/deps/lib/${CMAKE_SHARED_LIBRARY_PREFIX}benchmark.a)
 target_link_libraries(Benchmarks ${CppBenchmark_BINARY_DIR}/deps/lib/${CMAKE_SHARED_LIBRARY_PREFIX}benchmark_main.a)
+target_link_libraries(Tests ${CppBenchmark_BINARY_DIR}/deps/lib/${CMAKE_SHARED_LIBRARY_PREFIX}benchmark.a)
+target_link_libraries(Tests ${CppBenchmark_BINARY_DIR}/deps/lib/${CMAKE_SHARED_LIBRARY_PREFIX}benchmark_main.a)
+target_link_libraries(Tests pthread)
 

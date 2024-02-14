@@ -32,10 +32,73 @@
 package uk.ac.ic.doc.spe;
 
 import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.Param;
+import org.openjdk.jmh.annotations.Setup;
+import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.Scope;
+import org.openjdk.jmh.runner.Runner;
+import org.openjdk.jmh.runner.options.Options;
+import org.openjdk.jmh.runner.options.OptionsBuilder;
+import tech.tablesaw.api.StringColumn;
+import tech.tablesaw.api.DoubleColumn;
+import tech.tablesaw.api.Table;
+import static tech.tablesaw.aggregate.AggregateFunctions.mean;
 
+import java.util.Random;
 
+@State(Scope.Benchmark)
 public class MyBenchmark {
+
+    private Table syntheticData;
+
+    @Param({"0.1", "0.3", "0.5", "0.7", "0.9"})
+    private double skewness;
+
+    @Setup
+    public void setup() {
+        syntheticData = generateTable(100000, skewness);
+    }
+
     @Benchmark
-    public void testMethod() {
+    public Table benchmarkSummarizeBy() {
+        return syntheticData.summarize("Value", mean).by("Category");
+    }
+
+    private static Table generateTable(int rowCount, double skewness) {
+        Random random = new Random(19);
+        String[] categories = new String[rowCount];
+        double[] values = new double[rowCount];
+
+        for (int i = 0; i < rowCount; i++) {
+            double bias = Math.pow(1 - skewness, 1); // increase for more pronounved skewness
+            int categoryIndex = (int) Math.floor(CATEGORIES.length * Math.pow(random.nextDouble(), bias));
+            
+            categories[i] = CATEGORIES[Math.min(categoryIndex, CATEGORIES.length - 1)];
+            values[i] = random.nextDouble() * 100;
+        }
+
+        return Table.create("Synthetic Data")
+                    .addColumns(StringColumn.create("Category", categories),
+                                DoubleColumn.create("Value", values));
+    }
+
+    private static final String[] CATEGORIES = generateCategories(1000);
+
+    private static String[] generateCategories(int count) {
+        String[] categories = new String[count];
+        for (int i = 0; i < count; i++) {
+            categories[i] = "Cat_" + i;
+        }
+        return categories;
+    }
+
+    public static void main(String[] args) throws Exception {
+        Options opt = new OptionsBuilder()
+                .include(MyBenchmark.class.getSimpleName())
+                .forks(1)
+                .build();
+
+        new Runner(opt).run();
     }
 }
+
