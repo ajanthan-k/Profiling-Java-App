@@ -90,6 +90,8 @@ void simplifiedSplitOn(const std::vector<Row>& tableData,
                        const std::vector<std::string>& splitColumns, 
                        std::vector<TableSlice>& slices) {
 
+    // std::unordered_map: Provides similar O(1) average case lookup and insertion as 
+    // Java's HashMap used within the `selectionMap`.
     std::unordered_map<std::string, RLEBitmap> selectionMap; 
 
     // Create selections with run-length encoding
