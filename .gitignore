@@ -1,0 +1,12 @@
+# Ignore all files, and allow-list the ones we want to track
+*
+/*
+
+!.gitignore
+
+!CppBenchmark
+!JavaBenchmark
+!TargetApplication
+!Breakdown.txt
+!Report.txt
+!README.md
