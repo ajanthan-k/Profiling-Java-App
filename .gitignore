@@ -7,6 +7,6 @@
 !CppBenchmark
 !JavaBenchmark
 !TargetApplication
-!Breakdown.txt
-!Report.txt
+!Profile.md
+!Report.md
 !README.md

@@ -10,8 +10,8 @@ This repository contains my coursework submission for the System Performance Eng
 
 ## Results and Analysis
 
-- A breakdown of the runtime of the Java application is provided in `Breakdown.txt` (Task 1).
-- The hypothesis and findings of microbenchmarking are documented in `Report.txt` (Task 2 + 3).
+- A breakdown of the runtime of the Java application is provided in [Profile.md](Profile.md) (Task 1).
+- The hypothesis and findings of microbenchmarking are documented in [Report.md](Report.md) (Task 2 + 3).
 
 
 ## Repository Structure
