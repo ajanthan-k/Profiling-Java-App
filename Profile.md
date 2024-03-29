@@ -7,6 +7,8 @@
 
 ## Detailed Breakdown:
 
+![vtune-flame](https://github.com/ajanthan-k/Profiling-and-Benchmarking/assets/66730849/f4848bd4-9388-4be2-b424-0324fd63b53c)
+
 **Data Smoothing**
 - **Time Consumed:** 170 ms (23% of overall CPU time).
 - **Performance Cost:** Attributed to operations within `splitOn` from `analytic::AnalyticQueryEngine::partition` → `table::StandardTableSliceGroup::create` → `table::StandardTableSliceGroup::splitOn`, and iterative actions by `java::lang::iterable::forEach`. These are necessary for organising data into partitions for smoothing calculations, each accounting for 10.8% of CPU time.
